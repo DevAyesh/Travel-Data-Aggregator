@@ -26,6 +26,23 @@ const API_SECRET = 'my_super_secret_api_key';
 const MOCK_TOKEN = 'Bearer mock_oauth_token_xyz_123';
 
 searchBtn.addEventListener('click', handleSearch);
+// Fetch attraction image from Wikipedia API
+async function fetchAttractionImage(attractionName) {
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(attractionName)}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.thumbnail && data.thumbnail.source) {
+            return data.thumbnail.source; 
+        } else {
+            return "https://via.placeholder.com/400x250?text=No+Image";
+        }
+    } catch (error) {
+        return "https://via.placeholder.com/400x250?text=Error";
+    }
+}
 
 // Allow Enter key to search
 countryInput.addEventListener('keypress', (e) => {
@@ -140,8 +157,7 @@ function updateMap(lat, lon, title) {
         .openPopup();
 }
 
-function updateAttractions(country) {
-    // Mock Data for demonstration
+async function updateAttractions(country) {
     const mockAttractions = {
         'Japan': ['Mount Fuji', 'Kyoto Temples', 'Tokyo Tower', 'Osaka Castle'],
         'France': ['Eiffel Tower', 'Louvre Museum', 'Palace of Versailles', 'French Riviera'],
@@ -150,14 +166,25 @@ function updateAttractions(country) {
         'Sri Lanka': ['Sigiriya', 'Temple of the Tooth', 'Ella Rock', 'Yala National Park']
     };
 
-    const list = mockAttractions[country] || ['City Center', 'National Museum', 'Historic Old Town', 'Central Park'];
+    const attractions = mockAttractions[country] || 
+                        ['National Museum', 'Old Town', 'City Center', 'Central Park'];
 
-    elAttractions.innerHTML = list.map(item => `
-        <div class="stat-card" style="align-items: center; text-align: center;">
-            <span class="stat-value" style="font-size: 1.2rem;">${item}</span>
-            <span class="stat-label">Must Visit</span>
-        </div>
-    `).join('');
+    elAttractions.innerHTML = ""; // clear
+
+    for (let place of attractions) {
+        const imgUrl = await fetchAttractionImage(place);
+
+        elAttractions.innerHTML += `
+            <div class="stat-card" style="align-items: center; text-align: center; padding: 10px;">
+                <img src="${imgUrl}" 
+                     alt="${place}" 
+                     style="width: 100%; height: 140px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+                 
+                <span class="stat-value" style="font-size: 1.2rem;">${place}</span>
+                <span class="stat-label">Must Visit</span>
+            </div>
+        `;
+    }
 }
 
 function calculateLocalTime(offsetStr) {
