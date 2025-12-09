@@ -23,7 +23,6 @@ const API_SECRET = 'my_super_secret_api_key';
 // Wait, prompt says "Reject if it doesn't match a hardcoded secret".
 // "Include 'x-api-key' and 'Authorization' headers in the POST request."
 // Since this is client-side code, we have to hardcode it or fetch it. Use the hardcoded value matching server env for now.
-//gg
 const MOCK_TOKEN = 'Bearer mock_oauth_token_xyz_123';
 
 searchBtn.addEventListener('click', handleSearch);
