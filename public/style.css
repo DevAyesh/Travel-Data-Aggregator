@@ -47,6 +47,7 @@ body::before {
 /* Sidebar */
 .sidebar {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border-right: 1px solid var(--glass-border);
     padding: 2rem;
@@ -58,6 +59,7 @@ body::before {
 .logo h2 {
     font-size: 1.5rem;
     background: linear-gradient(to right, #38bdf8, #818cf8);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -118,6 +120,7 @@ button:hover {
 
 .stat-card {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     padding: 1.5rem;
